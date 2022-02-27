@@ -9,15 +9,14 @@ using UnityEngine.Networking;
 //https://opentdb.com/api.php?amount=10&category=12&difficulty=medium&type=multiple
 public class triviaFetcher : MonoBehaviour
 {
-    public int gameLength;
-    private int round = -1;
+    [SerializeField] private int gameLength;
+    private int _questionCount = -1;
     public bool isListReady = false;
     List<triviaQuestion> questionList = new List<triviaQuestion>();
 
     private void Start()
     {
-        generateQuestionList();
-        //translateQuestions("my name is daniel");
+        generateQuestionList();        
     }
     
     public triviaQuestion getSpecificQuestion(int round) 
@@ -27,16 +26,15 @@ public class triviaFetcher : MonoBehaviour
 
     public triviaQuestion getNextQuestion() 
     {
-        //Puhhaaa grimgrim, lav noget ordentligt game logik 
-        if (round==questionList.Count-1)
+        if (_questionCount==questionList.Count-1)
         {
             Debug.LogWarning("Generating new questions!");
             generateQuestionList();
-            round = -1;
+            _questionCount = -1;
         }
 
-        round++;
-        return questionList[round];        
+        _questionCount++;
+        return questionList[_questionCount];        
     }
 
     public void generateQuestionList()
@@ -44,8 +42,7 @@ public class triviaFetcher : MonoBehaviour
         //string URL = "https://trivia.willfry.co.uk/api/questions?categories=general_knowledge,movies,music&limit=10";
         //String builder, get playerPrefs and set all genres
         string URL = "https://trivia.willfry.co.uk/api/questions?categories=" + stringifyPlayerPrefs();
-
-
+        //URL = "https://opentdb.com/api.php?amount=10&category=12&difficulty=medium&type=multiple";
 
         StartCoroutine(ProcessRequest(URL));
 
@@ -72,7 +69,7 @@ public class triviaFetcher : MonoBehaviour
     private string stringifyPlayerPrefs()
     {
         string genres = "";
-
+        
         for (int i = 0; i < 9; i++)
         {
             genres += PlayerPrefs.GetString(i.ToString()) + ",";
@@ -112,27 +109,6 @@ public class triviaFetcher : MonoBehaviour
                 }
             }
         }
-
-        /*
-        StartCoroutine(SendRequest());
-
-        IEnumerator SendRequest()
-        {
-            Uri uri = new Uri("https://nlp-translation.p.rapidapi.com/v1/jsontranslate"); // Uri is a class in the System namespace, pay attention to reference the namespace
-            UnityWebRequest uwr = new UnityWebRequest(uri);        // Create an object UnityWebRequest
-            uwr.timeout = 5;
-            yield return uwr.SendWebRequest();                     // Wait returns the requested information
-            if (uwr.isHttpError || uwr.isNetworkError)             // If their request fails, or network failure
-            {
-                Debug.LogError(uwr.error); // print the wrong reasons
-            }
-            else // request was successful
-            {
-                Debug.Log("The request was successful.");
-                Debug.Log(uwr.downloadHandler.text);                
-            }
-        }
-        */
     }
 
 

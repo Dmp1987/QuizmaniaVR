@@ -55,6 +55,7 @@ public class QuizMaster : MonoBehaviour
 
     void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             RaycastHit hit;
@@ -73,6 +74,7 @@ public class QuizMaster : MonoBehaviour
         {
             getNextQuestion();
         }
+        */
     }
 
     private void submitAnswer(string v, RaycastHit hit)
